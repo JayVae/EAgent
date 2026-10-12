@@ -1,0 +1,50 @@
+﻿[
+    {
+        "CmdCount": 632,
+        "Guid": "d09f2340818511d396f6aaf844c7e325",
+        "Key": "krnln",
+        "MaxRefConstPos": 248,
+        "MaxRefObjectPos": 49,
+        "Name": "系统核心支持库",
+        "Version": {
+            "Major": 5,
+            "Minor": 7
+        }
+    },
+    {
+        "CmdCount": 0,
+        "Guid": "27bb20fdd3e145e4bee3db39ddd6e64c",
+        "Key": "iext",
+        "MaxRefConstPos": 0,
+        "MaxRefObjectPos": 5,
+        "Name": "扩展界面支持库一",
+        "Version": {
+            "Major": 2,
+            "Minor": 0
+        }
+    },
+    {
+        "CmdCount": 8,
+        "Guid": "52F260023059454187AF826A3C07AF2A",
+        "Key": "shell",
+        "MaxRefConstPos": 0,
+        "MaxRefObjectPos": 0,
+        "Name": "操作系统界面功能支持库",
+        "Version": {
+            "Major": 3,
+            "Minor": 0
+        }
+    },
+    {
+        "CmdCount": 5,
+        "Guid": "A512548E76954B6E92C21055517615B0",
+        "Key": "spec",
+        "MaxRefConstPos": 0,
+        "MaxRefObjectPos": 0,
+        "Name": "特殊功能支持库",
+        "Version": {
+            "Major": 3,
+            "Minor": 1
+        }
+    }
+]
