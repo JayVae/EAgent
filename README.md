@@ -8,7 +8,7 @@
 ## 起源——为了省钱
 - 市面上常见的Agent，它们的功能都比我这个项目强大100倍！**但它们都需要ApiKey、都需要花钱买tokens**。
 - 但我是个穷B，只能用免费的deepseek网页版，我又不是搞什么企业级Agent工作任务，我难道还要花几毛钱的tokens跟ai说"你好"、花几块钱让ai帮我写个文章？哎呀用网页端得了。
-- 但是，网页ai无法直接编辑我的电脑文件，开发中，只能让ai生成代码，然后复制粘贴。那我直接让ai生成PowerShell代码，直接执行，扔结果给它，不就好了吗？卧槽对啊，于是就有了这个项目：自动复制粘贴、自动执行PowerShell代码、实现token自由!
+- 但是，网页ai无法直接编辑我的电脑文件，开发中，只能让ai生成代码，然后复制粘贴。那我直接让ai生成PowerShell代码，直接执行，扔结果给它，不就好了吗？卧槽对啊，于是就有了这个项目：自动复制粘贴、自动执行PowerShell代码、实现token自由，让网页版deepseek "操控" 你的电脑喵！
 
 ## 快速使用
 - 下载文件：[点我下载](https://release-assets.githubusercontent.com/github-production-release-asset/1415195979/50707ff5-dd46-41bc-bc2b-af86e1ecdf4a?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-12T16%3A22%3A30Z&rscd=attachment%3B+filename%3DEAgentWeb.exe&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-12T15%3A22%3A23Z&ske=2026-10-12T16%3A22%3A30Z&sks=b&skv=2018-11-09&sig=%2F2Ls5UZ%2BcEHm6n6Ge%2FiftI8i51qxOfWOL%2BgIGTN1FuQ%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MTgxOTg4MiwibmJmIjoxNzkxODE5NTgyLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.3HovtMuI7ng5xP4vWvcWRYbya6B_vfpohu0cIst1jtM&response-content-disposition=attachment%3B%20filename%3DEAgentWeb.exe&response-content-type=application%2Foctet-stream)
