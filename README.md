@@ -14,13 +14,18 @@
 - 下载文件：https://github.com/YaoGaoChaoLe/EAgentWeb/releases
 - 解压、运行`EAgentWeb.exe`
 - 进入程序，点击`选择工作目录`按钮，选择一个目录。
+- 然后会自动打开edge浏览器，请自行登录后，才能进行下一步操作。
+- 点击`开始新对话`。等待ai分析提示词...
+- 到你回复ai了！使用工具发送信息，而**不是用网页版发送信息**。`网页版的唯一作用就是给你看的，而不是发消息的。`
+
 
 <img width="1061" height="761" alt="1" src="https://github.com/user-attachments/assets/5e6db9a2-9301-44a0-aa83-3d288646df36" />
 
-- 会自动打开edge浏览器，请自行登录后，才能进行下一步操作。
-- 点击`开始新对话`。
+---
 
- <img width="1965" height="806" alt="df1d401c-527e-41bb-81a3-8fcd8b257d95" src="https://github.com/user-attachments/assets/a08c8307-d83b-4cea-8f8a-df4388310b9c" />
+<img width="1965" height="806" alt="df1d401c-527e-41bb-81a3-8fcd8b257d95" src="https://github.com/user-attachments/assets/a08c8307-d83b-4cea-8f8a-df4388310b9c" />
+
+---
 
 <img width="1962" height="929" alt="QQ20261012-222024" src="https://github.com/user-attachments/assets/3ab39b76-3e14-4581-9a67-3665773bc9f3" />
 
