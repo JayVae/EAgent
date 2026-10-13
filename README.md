@@ -1,14 +1,15 @@
 # DeepSeek EAgent Web
-让网页版deepseek "操控" 你的电脑 | 0配置、0门槛、0tokens。基于deepseek-网页版制作的简易Agent，不需要APIkey，实现tokens自由。
+让 DeepSeek网页版 "操控" 你的电脑 | 基于`DeepSeek网页版`制作的简易Agent，不需要APIkey，实现tokens自由 | 0配置、0门槛、0 tokens
 
 ## 环境要求
 - Edge浏览器(电脑自带)
-- Win10/11 `更早的win版本我没测试过，我不知道喵。`
+- Win10/11 `更早的 Win版本 我没测试过，我不知道喵。`
 
 ## 起源——为了省钱
 - 市面上常见的Agent，它们的功能都比我这个项目强大100倍！**但它们都需要ApiKey、都需要花钱买tokens**。
-- 但我是个穷B，只能用免费的deepseek网页版，我又不是搞什么企业级Agent工作任务，我难道还要花几毛钱的tokens跟ai说"你好"、花几块钱让ai帮我写个文章？哎呀用网页端得了。
-- 但是，网页ai无法直接编辑我的电脑文件，开发中，只能让ai生成代码，然后复制粘贴。那我直接让ai生成PowerShell代码，直接执行，扔结果给它，不就好了吗？卧槽对啊，于是就有了这个项目：自动复制粘贴、自动执行PowerShell代码、实现token自由，让网页版deepseek "操控" 你的电脑喵！
+- 但我是个穷B、我又不搞啥企业级Agent工作,没必要花钱买tokens。所以只能用免费的DeepSeek网页版。
+- 但是，DeepSeek网页 无法直接编辑我的电脑文件。开发时，只能让ai生成代码，然后复制粘贴，非常麻烦，它不能"操控"我的电脑。
+- 我想，直接让ai生成PowerShell代码、执行扔、结果给它，不就好了吗？卧槽对啊，于是就有了这个项目：自动复制粘贴、自动执行PowerShell代码、实现token自由，让网页版deepseek "操控" 你的电脑喵！
 
 ## 快速使用
 - 下载文件：[点我下载](https://github.com/YaoGaoChaoLe/EAgentWeb/releases)
