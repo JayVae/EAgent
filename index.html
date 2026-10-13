@@ -42,7 +42,7 @@ footer{color:var(--sub);font-size:13px;text-align:center;padding:60px 0 40px;bor
 
 <header>
   <h1>DeepSeek EAgent Web</h1>
-  <p class="tag">0配置、0门槛、0tokens。基于 deepseek 网页版制作的简易 Agent，<br>不需要 API Key，实现 tokens 自由。</p>
+  <p class="tag">让 DeepSeek 网页版“操控”你的电脑 | 基于 <code>DeepSeek 网页版</code> 制作的简易 Agent，<br>不需要 API Key，实现 tokens 自由 | 0配置、0门槛、0tokens</p>
   <div class="badges">
     <span class="badge">免 API Key</span>
     <span class="badge">tokens 自由</span>
@@ -57,7 +57,7 @@ footer{color:var(--sub);font-size:13px;text-align:center;padding:60px 0 40px;bor
 <div class="card">
   <ul>
     <li>Edge 浏览器（电脑自带）</li>
-    <li>Win10 / 11 <em>更早的 win 版本我没测试过，我不知道喵。</em></li>
+    <li>Win10 / 11 <em>更早的 Win 版本 我没测试过，我不知道喵。</em></li>
   </ul>
 </div>
 
@@ -65,16 +65,17 @@ footer{color:var(--sub);font-size:13px;text-align:center;padding:60px 0 40px;bor
 <div class="card">
   <ul>
     <li>市面上常见的 Agent，它们的功能都比我这个项目强大 100 倍！<strong>但它们都需要 ApiKey、都需要花钱买 tokens</strong>。</li>
-    <li>但我是个穷 B，只能用免费的 deepseek 网页版。我又不是搞什么企业级 Agent 工作任务，难道还要花几毛钱的 tokens 跟 AI 说“你好”、花几块钱让 AI 帮我写个文章？哎呀用网页端得了。</li>
-    <li>但是，网页 AI 无法直接编辑我的电脑文件。开发中只能让 AI 生成代码，然后复制粘贴。那我直接让 AI 生成 PowerShell 代码，直接执行，把结果扔给它，不就好了吗？卧槽对啊，于是就有了这个项目：<strong>自动复制粘贴、自动执行 PowerShell 代码、实现 token 自由！</strong></li>
+    <li>但我是个穷 B、我又不搞啥企业级 Agent 工作，没必要花钱买 tokens。所以只能用免费的 DeepSeek 网页版。</li>
+    <li>但是，DeepSeek 网页 无法直接编辑我的电脑文件。开发时，只能让 AI 生成代码，然后复制粘贴，非常麻烦，它不能“操控”我的电脑。</li>
+    <li>我想，直接让 AI 生成 PowerShell 代码、执行、扔结果给它，不就好了吗？卧槽对啊，于是就有了这个项目：<strong>自动复制粘贴、自动执行 PowerShell 代码、实现 token 自由，让网页版 DeepSeek “操控” 你的电脑喵！</strong></li>
   </ul>
 </div>
 
 <h2>快速使用</h2>
 <div class="card">
   <ol>
-    <li>下载文件：<a href="https://github.com/YaoGaoChaoLe/EAgentWeb/releases" target="_blank" rel="noopener">GitHub Releases</a></li>
-    <li>解压、运行 <code>EAgentWeb.exe</code>。</li>
+    <li>下载文件：<a href="https://release-assets.githubusercontent.com/github-production-release-asset/1415195979/50707ff5-dd46-41bc-bc2b-af86e1ecdf4a?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-12T16%3A22%3A30Z&rscd=attachment%3B+filename%3DEAgentWeb.exe&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-12T15%3A22%3A23Z&ske=2026-10-12T16%3A22%3A30Z&sks=b&skv=2018-11-09&sig=%2F2Ls5UZ%2BcEHm6n6Ge%2FiftI8i51qxOfWOL%2BgIGTN1FuQ%3D" target="_blank" rel="noopener">点我下载</a></li>
+    <li>运行 <code>EAgentWeb.exe</code>。</li>
     <li>进入程序，点击 <code>选择工作目录</code> 按钮，选择一个目录。</li>
     <li>然后会自动打开 Edge 浏览器，请自行登录后，才能进行下一步操作。</li>
     <li>点击 <code>开始新对话</code>。等待 AI 分析提示词……</li>
@@ -95,13 +96,12 @@ footer{color:var(--sub);font-size:13px;text-align:center;padding:60px 0 40px;bor
   <h3>AI 对本项目原理的总结</h3>
   <pre><code>用 PowerShell 连接 Chrome/Edge 的远程调试端口，
 通过 CDP WebSocket 在真实 DeepSeek 页面里执行 JavaScript，
-模拟输入、上传文件、点击发送，并轮询 DOM 判断助手回复是否稳定，
-最后返回助手回复信息。</code></pre>
+模拟输入、上传文件、点击发送，并轮询 DOM 判断助手回复是否稳定，最后返回助手回复信息。</code></pre>
 </div>
 
 <h2>适用场景</h2>
 <div class="card">
-  <p style="color:var(--sub);margin:0">个人工具、学习交流、拿来玩、协助开发、节省在网页端复制粘贴 AI 代码的流程……</p>
+  <p style="color:var(--sub);margin:0"><del>个人工具、学习交流、拿来玩、协助开发、节省在网页端复制粘贴 AI 代码的流程...</del></p>
 </div>
 
 <div class="card warn">
@@ -109,7 +109,7 @@ footer{color:var(--sub);font-size:13px;text-align:center;padding:60px 0 40px;bor
   <ul>
     <li>本项目不适用：商业、盈利、生产环境、指望生成优质作品、大规模滥用……</li>
     <li><strong>安全警告</strong>：本项目不论在工具设计上还是提示词上，没有做任何安全防御。提示词注入攻击等，作者不承担任何责任。</li>
-    <li>本项目由 <code>E语言</code> 编写，由于其一言难尽的狗屎编译器，会让部分杀毒软件误报为恶意程序。但我保证：本项目自身完全不会带有任何恶意代码，请放心使用。</li>
+    <li>本项目由 <code>E语言</code> 编写，由于其一言难尽的狗屎编译器，会让部分杀毒软件误报为恶意程序。但我保证：本项目自身完全不会带有任何恶意代码，请放心使用。<a href="https://github.com/user-attachments/files/33344596/_3ef75307f364aac0ab0212977530d167eadcc090084ce65829f8e4678737dcf7.pdf" target="_blank" rel="noopener">样本分析报告.pdf</a></li>
   </ul>
 </div>
 
