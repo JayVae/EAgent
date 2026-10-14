@@ -53,3 +53,4 @@
 - 本项目由`E语言`编写，由于其一言难尽的狗屎编译器，会让部分杀毒软件会误报为恶意程序。但我保证：**本项目自身完全不会带有任何恶意代码，请放心使用。**[微步云-样本分析报告.pdf](https://github.com/user-attachments/files/33344596/_3ef75307f364aac0ab0212977530d167eadcc090084ce65829f8e4678737dcf7.pdf)
 
 - 本项目创建于 2026 年 10 月 8 日，目前处于开发阶段。开源仓库 https://github.com/YaoGaoChaoLe/EAgentWeb/
+- 本项目采用 GNU General Public License v3.0，详见 [LICENSE](LICENSE) 文件。
