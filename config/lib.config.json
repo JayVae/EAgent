@@ -48,15 +48,15 @@
         }
     },
     {
-        "CmdCount": 11,
-        "Guid": "{4F9CE92B-DB1C-649C-869C-91DBD3C51A9C}",
-        "Key": "yihui",
+        "CmdCount": 3,
+        "Guid": "F7FC1AE45C5C4758AF03EF19F18A395D",
+        "Key": "eAPI",
         "MaxRefConstPos": 0,
         "MaxRefObjectPos": 0,
-        "Name": "E_易会开发支持库",
+        "Name": "应用接口支持库",
         "Version": {
-            "Major": 1,
-            "Minor": 0
+            "Major": 3,
+            "Minor": 1
         }
     }
 ]
