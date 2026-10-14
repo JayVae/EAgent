@@ -1,4 +1,4 @@
-# DeepSeek EAgent Web
+# EAgent 
 让 DeepSeek网页版 "操控" 你的电脑 | 基于`DeepSeek网页版`制作的简易Agent，不需要APIkey，实现tokens自由 | 0配置、0门槛、0 tokens
 
 ## 环境要求
