@@ -13,7 +13,7 @@
 - deepseek网页版 能编辑电脑文件、能看到你的电脑屏幕、控制你的键盘和鼠标！...还能更多，正在持续开发中...
 
 ## 快速使用
-- 下载文件：[点我下载](https://github.com/YaoGaoChaoLe/EAgentWeb/releases)
+- 下载文件：[点我下载](https://github.com/YaoGaoChaoLe/EAgent/releases)
 - 运行`EAgentWeb.exe`
 - 进入程序，点击`选择工作目录`按钮，选择一个目录。
 - 然后会自动打开edge浏览器，请自行登录后，才能进行下一步操作。
