@@ -45,6 +45,7 @@ Start-Process -FilePath $ChromePath -ArgumentList @(
     "--disable-background-timer-throttling",
     "--disable-backgrounding-occluded-windows",
     "--disable-renderer-backgrounding",
+    "--remote-allow-origins=*"
     "--disable-features=CalculateNativeWinOcclusion",
     $Url
 ) -WindowStyle Normal
