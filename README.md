@@ -1,5 +1,5 @@
 # EAgent 
-0 tokens、0 门槛 | 基于 DeepSeek 网页版制作的轻量级 Agent —— 让 DeepSeek "操控"你的电脑。
+0 tokens、0门槛 、轻量级 | 基于 DeepSeek 网页版制作的 Agent —— 让 deepseek "操控"你的电脑。
 
 ## 环境要求
 - Edge 浏览器(电脑自带)
