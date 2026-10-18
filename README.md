@@ -41,7 +41,7 @@
 
   
 
-## 项目原理 —— 自动化脚本
+## 实现原理 —— 自动化脚本
 - EAgent **不是反代**、没第三方中转、没逆向 DeepSeek 网页！
 - 核心原理是：cdp自动化模拟用户操作，**和反代一样均违反了 [DeepSeek 用户协议](https://cdn.deepseek.com/policies/zh-CN/deepseek-terms-of-use.html)**。
 - 以下是AI对本项目原理总结：
@@ -52,10 +52,9 @@
 ```
 
 ## 声明 —— 风险与利益共存，一分钱一分货
-- 使用本项目前，您应该清楚：
+- 您应该清楚：
     - EAgent 轻量级的设计：整个文件大小连 3 MB都不到的一个 .exe 小软件，只能当玩具玩/学习交流，不可用于生产环境；
-    - DeepSeek 网页本来就禁止被白嫖：EAgent 白嫖 网页/token，本身就动别人蛋糕；
-    - DeepSeek 用户协议 禁止自动化控制：极端/高频滥用会被 DeepSeek 暂时封禁`(比如连续4小时写10万行代码)`。作者不承担责任；
     - EAgent 无安全措施：DeepSeek 可能生成恶意代码、再通过 EAgent 破坏系统；
+    - [DeepSeek 用户协议](https://cdn.deepseek.com/policies/zh-CN/deepseek-terms-of-use.html)，DeepSeek 网页本来就禁止被白嫖 —— EAgent 动了别人的蛋糕，极端高频滥用会被 DeepSeek 暂时封禁`(比如连续4小时写10万行代码)`。作者不承担责任；
 - 病毒问题：本项目由 `e语言` 编写，由于其一言难尽的狗屎编译器，使部分杀毒软件误报木马病毒。但我保证：**本项目自身不会带有任何恶意代码，请放心使用。**[微步云-样本分析报告.pdf](https://github.com/user-attachments/files/33344596/_3ef75307f364aac0ab0212977530d167eadcc090084ce65829f8e4678737dcf7.pdf)
 - 本项目创建于 2026 年 10 月 8 日，目前处于开发阶段。遵循 `GPL-3.0` 协议，开源仓库 https://github.com/YaoGaoChaoLe/EAgent/
