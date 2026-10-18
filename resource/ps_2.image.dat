@@ -54,39 +54,56 @@ if ($ws.State -ne 'Open') { Write-Output "ERROR: WS not open"; exit 1 }
 $script:cdpId = 0
 
 function CDPRecv([int]$id, [int]$timeoutMs) {
-    $buf = New-Object byte[] 1048576
-    $recvSeg = New-Object System.ArraySegment[byte] -ArgumentList @(,$buf)
     $deadline = (Get-Date).AddMilliseconds($timeoutMs)
-    while ((Get-Date) -lt $deadline) {
-        $msLeft = [int]($deadline - (Get-Date)).TotalMilliseconds
-        if ($msLeft -lt 1) { return $null }
-        $task = $ws.ReceiveAsync($recvSeg, [Threading.CancellationToken]::None)
-        if (-not $task.Wait($msLeft)) { return $null }
-        $rr = $task.Result
-        if ($rr -and $rr.Count -gt 0) {
-            $text = [Text.Encoding]::UTF8.GetString($buf, 0, $rr.Count)
-            $pattern = '"id"\s*:\s*' + $id + '\b'
-            foreach ($line in ($text -split "`n")) {
-                if ($line -match $pattern) {
-                    try { return ($line | ConvertFrom-Json) } catch {}
-                }
+    $pattern = '"id"\s*:\s*' + $id + '\b'
+    try {
+        while ((Get-Date) -lt $deadline) {
+            $ms = New-Object System.IO.MemoryStream
+            $buf = New-Object byte[] 4194304
+            $done = $false
+            while (-not $done) {
+                $left = [int]($deadline - (Get-Date)).TotalMilliseconds
+                if ($left -lt 1) { break }
+                $seg = New-Object System.ArraySegment[byte] -ArgumentList @(,$buf)
+                $task = $ws.ReceiveAsync($seg, [Threading.CancellationToken]::None)
+                if (-not $task.Wait($left)) { break }
+                $rr = $task.Result
+                if ($rr.Count -gt 0) { $ms.Write($buf, 0, $rr.Count) }
+                if ($rr.EndOfMessage) { $done = $true }
             }
+            if ($ms.Length -gt 0) {
+                $text = [Text.Encoding]::UTF8.GetString($ms.ToArray())
+                $ms.Dispose()
+                foreach ($line in ($text -split "`n")) {
+                    if ($line -match $pattern) {
+                        try { return ($line | ConvertFrom-Json) } catch {}
+                    }
+                }
+            } else { $ms.Dispose() }
         }
+    } catch {
+        Write-Output "ERROR: WS_RECV_FAIL: $($_.Exception.Message)"
+        return $null
     }
     return $null
 }
 
 function CDPCall([string]$method, $params, [int]$timeoutMs = 8000) {
-    $script:cdpId++; $id = $script:cdpId
-    $payload = @{ id=$id; method=$method; params=$params } | ConvertTo-Json -Depth 20 -Compress
-    $bytes = [Text.Encoding]::UTF8.GetBytes($payload)
-    $seg = New-Object System.ArraySegment[byte] -ArgumentList @(,$bytes)
-    $ws.SendAsync($seg, [System.Net.WebSockets.WebSocketMessageType]::Text, $true, [Threading.CancellationToken]::None).Wait(3000) | Out-Null
-    $resp = CDPRecv $id $timeoutMs
-    if ($resp -and $resp.result) { return $resp.result }
-    return $null
+    try {
+        $script:cdpId++; $id = $script:cdpId
+        $payload = @{ id=$id; method=$method; params=$params } | ConvertTo-Json -Depth 20 -Compress
+        $bytes = [Text.Encoding]::UTF8.GetBytes($payload)
+        $seg = New-Object System.ArraySegment[byte] -ArgumentList @(,$bytes)
+        $sendTask = $ws.SendAsync($seg, [System.Net.WebSockets.WebSocketMessageType]::Text, $true, [Threading.CancellationToken]::None)
+        if (-not $sendTask.Wait(3000)) { Write-Output "ERROR: CDP_SEND_TIMEOUT: $method"; return $null }
+        $resp = CDPRecv $id $timeoutMs
+        if ($resp -and $resp.result) { return $resp.result }
+        return $null
+    } catch {
+        Write-Output "ERROR: CDP_$method : $($_.Exception.Message)"
+        return $null
+    }
 }
-
 function CDP([string]$expr, [int]$timeoutMs = 8000) {
     $r = CDPCall 'Runtime.evaluate' @{ expression=$expr; returnByValue=$true } $timeoutMs
     if ($r -and $r.result) { return $r.result.value }
@@ -265,11 +282,28 @@ $prevText = $lastAssist0
 $stableTicks = 0
 $requiredStable = 7
 $sawNew = $false
+$nullTicks = 0
+$requiredNull = 10
+$ctxWarn = $false
+$cdpBroken = $false
 
 while ((Get-Date) -lt $deadline) {
     Start-Sleep -Milliseconds 300
     $cur = CDP $lastAssistJs -timeoutMs 5000
-    if ($null -eq $cur) { continue }
+    if ($null -eq $cur) {
+        $nullTicks++
+        if (-not $ctxWarn -and $nullTicks -ge 3) {
+            $ctxWarn = $true
+            Write-Output "WARN: CTX_HEAVY_OR_CDP_SLOW: null_ticks=$nullTicks"
+        }
+        if ($nullTicks -ge $requiredNull) {
+            $cdpBroken = $true
+            Write-Output "ERROR: CDP_BROKEN: 连续 $nullTicks 次无响应，通道疑似断开，建议开启新对话"
+            break
+        }
+        continue
+    }
+    $nullTicks = 0
     $cur = [string]$cur
 
     if (-not $sawNew) {
@@ -293,7 +327,8 @@ while ((Get-Date) -lt $deadline) {
     }
 }
 
-$ws.Dispose()
+if ($ws.State -eq 'Open') { $ws.Dispose() }
+if ($cdpBroken) { exit 3 }
 
 if ($finalText) {
     if ($Encoding.ToLower() -match 'utf-?8') {
