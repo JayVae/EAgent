@@ -29,15 +29,17 @@
 - 到你回复它了 —— 用 EAgent 发消息，而**不是用网页版发消息**。 `网页版的唯一作用就是给你看的，而不是发消息的。`
 
 
-<img width="1061" height="761" alt="1" src="https://github.com/user-attachments/assets/5e6db9a2-9301-44a0-aa83-3d288646df36" />
+
+<img width="661" height="841" alt="1" src="https://github.com/user-attachments/assets/10cad7ef-6469-4ffe-8c03-fbf0f86d26a2" />
 
 ---
 
-<img width="1965" height="806" alt="df1d401c-527e-41bb-81a3-8fcd8b257d95" src="https://github.com/user-attachments/assets/a08c8307-d83b-4cea-8f8a-df4388310b9c" />
+<img width="1568" height="868" alt="2" src="https://github.com/user-attachments/assets/dc63d9d4-f535-4679-96f3-05049d563f4d" />
 
 ---
 
-<img width="1962" height="929" alt="QQ20261012-222024" src="https://github.com/user-attachments/assets/3ab39b76-3e14-4581-9a67-3665773bc9f3" />
+<img width="1554" height="875" alt="3" src="https://github.com/user-attachments/assets/ad845430-8d07-4a55-b26d-96de26b25793" />
+
 
   
 
