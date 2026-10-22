@@ -1,5 +1,10 @@
-﻿# cmd调用_发送并回复_不传文件：powershell -NoProfile -ExecutionPolicy Bypass -Command "& '{{运行目录}}\2_发送并等待回复.ps1' -MessageB64 '{{你的Base64字符串}}'"
-# cmd调用_发送并回复_附带文件：powershell -NoProfile -ExecutionPolicy Bypass -Command "& '{{运行目录}}\2_发送并等待回复.ps1' -Files {{提交文件}} -MessageB64 '{{你的Base64字符串}}'"
+﻿# 长文本
+#   第 1 步：先把 Base64 写进文件（UTF-8 无 BOM）， {{运行目录}}\msg.b64。内容形如 5L2g5aW977yM6L+Z5piv5LiA5q61...（纯 Base64 字符串）
+#   powershell -NoProfile -ExecutionPolicy Bypass -Command "& '{{运行目录}}\2_发送并等待回复.ps1' -MessageB64 '{{运行目录}}\msg.b64'"
+
+# 长文本 + 附带文件
+#   powershell -NoProfile -ExecutionPolicy Bypass -Command "& '{{运行目录}}\2_发送并等待回复.ps1' -Files \"文件名\",\"文件名\" -MessageB64 '{{运行目录}}\msg.b64'"
+
 param(
     [string]$Message = "",
     [string]$MessageB64 = "",
@@ -38,6 +43,9 @@ function pick(key){
 "@
 
 if ($MessageB64) {
+    if (Test-Path -LiteralPath $MessageB64 -PathType Leaf) {
+        $MessageB64 = [IO.File]::ReadAllText((Resolve-Path -LiteralPath $MessageB64).Path).Trim()
+    }
     try {
         $bytes = [Convert]::FromBase64String($MessageB64)
         $Message = [Text.Encoding]::UTF8.GetString($bytes)
