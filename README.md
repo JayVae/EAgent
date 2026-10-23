@@ -39,7 +39,7 @@
 
 ## 实现原理 —— 自动化脚本
 - EAgent **不是反代**、没第三方中转、没逆向 DeepSeek 网页！
-- 核心原理是：cdp 自动化模拟用户操作，**和反代一样均违反了 [DeepSeek 用户协议](https://cdn.deepseek.com/policies/zh-CN/deepseek-terms-of-use.html)**。
+- 核心原理是：cdp 自动化模拟用户操作，**和反代一样均违反了 [DeepSeek 用户协议](https://cdn.deepseek.com/policies/zh-CN/deepseek-terms-of-use.html)**。EAgent 的实现原理理论上比反代安全。
 ```
 [ DeepSeek 分析本源码后总结 ]
     用 PowerShell 连接 Chrome/Edge 调试端口，
