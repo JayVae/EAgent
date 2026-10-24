@@ -54,3 +54,8 @@
     - EAgent 有基础的防风控措施，但是 **极端高频的使用** 仍会被 DeepSeek 限制，作者不承担责任；
 - 病毒问题：本项目由 `e语言` 编写，由于其一言难尽的狗屎编译器，使部分杀毒软件误报木马病毒。但我保证：**本项目自身不会带有任何恶意代码，请放心使用。**[微步云-样本分析报告.pdf](https://github.com/user-attachments/files/33344596/_3ef75307f364aac0ab0212977530d167eadcc090084ce65829f8e4678737dcf7.pdf)
 - 本项目始于 2026/10/8，处于开发阶段，欢迎提交 [issue](https://github.com/YaoGaoChaoLe/EAgent/issues)。开源仓库 [在这](https://github.com/YaoGaoChaoLe/EAgent/)，遵循 `GPL-3.0` 协议。
+
+```
+没事弄了点好玩的：
+https://yaogaochaole.github.io/EAgent/Works/liang-skin/
+```
