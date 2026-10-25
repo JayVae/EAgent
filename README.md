@@ -1,4 +1,4 @@
-# EAgent 
+# 易Agent 
 0 tokens、0门槛 、轻量级 | 基于 DeepSeek 网页版制作的 Agent —— 让 deepseek "操控"你的电脑。
 
 ## 环境要求
