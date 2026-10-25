@@ -4,7 +4,6 @@
 
 # 长文本 + 附带文件
 #   powershell -NoProfile -ExecutionPolicy Bypass -Command "& '{{运行目录}}\2_发送并等待回复.ps1' -Files \"文件名\",\"文件名\" -MessageB64 '{{运行目录}}\msg.b64'"
-
 param(
     [string]$Message = "",
     [string]$MessageB64 = "",
@@ -13,12 +12,20 @@ param(
     [int]$Timeout = 180,
     [string]$OutputFile = "",
     [string]$Encoding = "gbk",
-    [switch]$NoWait
+    [switch]$Quiet = $false
 )
+$script:DbgT0 = Get-Date
+function Dbg([string]$msg, [string]$color = 'DarkGray') {
+    if ($Quiet) { return }
+    $ms = [int]((Get-Date) - $script:DbgT0).TotalMilliseconds
+    Write-Host ("[{0,7}ms] {1}" -f $ms, $msg) -ForegroundColor $color
+}
 
 if ($PSScriptRoot) { $WorkDir = $PSScriptRoot } else { $WorkDir = (Get-Location).Path }
 if (-not $OutputFile) { $OutputFile = Join-Path $WorkDir "reply.txt" }
-# ===== 选择器配置（方案二：集中配置 / 方案一：候选回退）=====
+Dbg ("参数 Message={0}字 B64={1} Files={2} Port={3} Timeout={4}s Out={5} Enc={6} Quiet={7}" -f $Message.Length, $MessageB64.Length, $Files.Count, $Port, $Timeout, $OutputFile, $Encoding, $Quiet) 'Cyan'
+Dbg ("工作目录={0}" -f $WorkDir) 'Cyan'
+
 $Selectors = @{
     assistant = @('.ds-assistant-message-main-content', '[class*="ds-assistant-message-main-content"]')
     user      = @('[class*="fbb737a4"]')
@@ -53,13 +60,16 @@ if ($MessageB64) {
 }
 if ([string]::IsNullOrEmpty($Message) -and $Files.Count -eq 0) { Write-Output "ERROR: no message"; exit 1 }
 
+Dbg ("查询调试端口 {0} 页面列表..." -f $Port) 'Cyan'
 $pages = Invoke-RestMethod -Uri "http://127.0.0.1:$Port/json" -TimeoutSec 5
 $target = $pages | Where-Object { $_.url -match "chat\.deepseek\.com" -and $_.type -eq 'page' } | Select-Object -First 1
 if (-not $target) { Write-Output "ERROR: no deepseek page"; exit 1 }
+Dbg ("目标页面 url={0}" -f $target.url) 'Cyan'
 
 $ws = New-Object System.Net.WebSockets.ClientWebSocket
 $ws.ConnectAsync([Uri]$target.webSocketDebuggerUrl, [Threading.CancellationToken]::None).Wait(5000) | Out-Null
 if ($ws.State -ne 'Open') { Write-Output "ERROR: WS not open"; exit 1 }
+Dbg "WebSocket 已连接" 'Cyan'
 
 $script:cdpId = 0
 
@@ -101,12 +111,19 @@ function CDPRecv([int]$id, [int]$timeoutMs) {
 function CDPCall([string]$method, $params, [int]$timeoutMs = 8000) {
     try {
         $script:cdpId++; $id = $script:cdpId
+        $dbgPs = ''
+        if ($null -ne $params) {
+            try { $dbgPs = ($params | ConvertTo-Json -Compress -Depth 4) } catch { $dbgPs = '<json?>' }
+        }
+        if ($dbgPs.Length -gt 150) { $dbgPs = $dbgPs.Substring(0,150) + '…' }
+        Dbg ("CDP>> #{0} {1} {2}" -f $id, $method, $dbgPs) 'Magenta'
         $payload = @{ id=$id; method=$method; params=$params } | ConvertTo-Json -Depth 20 -Compress
         $bytes = [Text.Encoding]::UTF8.GetBytes($payload)
         $seg = New-Object System.ArraySegment[byte] -ArgumentList @(,$bytes)
         $sendTask = $ws.SendAsync($seg, [System.Net.WebSockets.WebSocketMessageType]::Text, $true, [Threading.CancellationToken]::None)
         if (-not $sendTask.Wait(3000)) { Write-Output "ERROR: CDP_SEND_TIMEOUT: $method"; return $null }
         $resp = CDPRecv $id $timeoutMs
+        Dbg ("CDP<< #{0} {1}" -f $id, $(if ($null -eq $resp) { 'NULL' } else { 'OK' })) 'Magenta'
         if ($resp -and $resp.result) { return $resp.result }
         return $null
     } catch {
@@ -114,6 +131,7 @@ function CDPCall([string]$method, $params, [int]$timeoutMs = 8000) {
         return $null
     }
 }
+
 function CDP([string]$expr, [int]$timeoutMs = 8000) {
     $r = CDPCall 'Runtime.evaluate' @{ expression=$expr; returnByValue=$true } $timeoutMs
     if ($r -and $r.result) { return $r.result.value }
@@ -126,7 +144,7 @@ $msgJs = $SelJs + @"
     if(els.length===0) return JSON.stringify({count:0, text:''});
     var last = els[els.length-1];
     var t = (last.textContent||'').trim();
-    return JSON.stringify({count:els.length, text:t});
+    return JSON.stringify({count:els.length, text:t});// 返回计数与文本
 })()
 "@
 
@@ -160,12 +178,11 @@ $btnJs = $SelJs + @"
 })()
 "@
 
-# -------- 保持页面活跃（防遮挡/最小化导致渲染停止） --------
 $null = CDPCall 'Page.enable' @{}
 $null = CDPCall 'Page.bringToFront' @{}
 $null = CDPCall 'Emulation.setFocusEmulationEnabled' @{enabled=$true}
 Write-Output "KEEPALIVE_SET"
-# -------- 0. 记录发送前的助手消息条数和用户消息条数 --------
+Dbg "页面保持活跃已设置" 'DarkGray'
 $initCount = 0
 $cv = CDP $msgJs -timeoutMs 4000
 if ($cv) { try { $initCount = [int](($cv | ConvertFrom-Json).count) } catch {} }
@@ -175,6 +192,7 @@ $uv = CDP $userJs -timeoutMs 4000
 if ($uv) { try { $uInit = [int](($uv | ConvertFrom-Json).count) } catch {} }
 
 Write-Output "INIT_COUNT: a=$initCount u=$uInit"
+Dbg ("初始计数 助手={0} 用户={1} 发送前末条长度={2}" -f $initCount, $uInit, $lastAssist0.Length) 'Cyan'
 $lastAssistJs = $SelJs + @"
 (function(){
     var a=pick('assistant');
@@ -186,7 +204,6 @@ $lastAssist0 = CDP $lastAssistJs -timeoutMs 4000
 if ($null -eq $lastAssist0) { $lastAssist0 = '' }
 Write-Output "PREV_ASSIST_LEN: $($lastAssist0.Length)"
 
-# -------- 1. 上传文件 --------
 if ($Files.Count -gt 0) {
     $abs = @()
     foreach ($f in $Files) {
@@ -197,12 +214,12 @@ if ($Files.Count -gt 0) {
     $objRes = CDPCall 'Runtime.evaluate' @{ expression = 'document.querySelector(''input[type="file"]'')'; returnByValue = $false }
     if (-not $objRes -or -not $objRes.result -or -not $objRes.result.objectId) { Write-Output "ERROR: no file input"; $ws.Dispose(); exit 1 }
     $objectId = $objRes.result.objectId
+    Dbg ("上传文件 {0} 个: {1}" -f $abs.Count, ($abs -join '; ')) 'Cyan'
     $null = CDPCall 'DOM.setFileInputFiles' @{ files = $abs; objectId = $objectId }
     Write-Output "FILES_SET: $($abs.Count)"
     Start-Sleep -Seconds 3
 }
 
-# -------- 2. 注入消息 --------
 $msgJson = $Message | ConvertTo-Json -Compress
 $injectJs = $SelJs + @"
 (function(){
@@ -217,6 +234,7 @@ $injectJs = $SelJs + @"
     return JSON.stringify({ok:true, len:ta.value.length});
 })()
 "@
+Dbg ("注入消息 长度={0}" -f $Message.Length) 'Cyan'
 $r = CDP $injectJs
 if (-not $r -or $r -notmatch '"ok":true') {
     Write-Output "ERROR: inject failed ($r)"
@@ -226,7 +244,6 @@ Write-Output "INJECTED"
 
 Start-Sleep -Milliseconds 300
 
-# -------- 3. 发送 --------
 if ([string]::IsNullOrEmpty($Message)) {
     $sendJs = $SelJs + @"
 (function(){
@@ -259,6 +276,7 @@ if ([string]::IsNullOrEmpty($Message)) {
 })()
 "@
 }
+Dbg ("执行发送 模式={0}" -f $(if ([string]::IsNullOrEmpty($Message)) { '按钮点击' } else { '输入框回车' })) 'Cyan'
 $r = CDP $sendJs
 if ($r -ne 'SENT') {
     Write-Output "ERROR: send failed ($r)"
@@ -266,45 +284,32 @@ if ($r -ne 'SENT') {
 }
 Write-Output "SEND_ACTION: SENT"
 
-# -------- 4a. NoWait: 只确认用户消息已发出 --------
-if ($NoWait) {
-    $deadline = (Get-Date).AddSeconds($Timeout)
-    while ((Get-Date) -lt $deadline) {
-        Start-Sleep -Milliseconds 300
-        $uv = CDP $userJs -timeoutMs 4000
-        if (-not $uv) { continue }
-        $us = $null; try { $us = $uv | ConvertFrom-Json } catch {}
-        if ($us -and [int]$us.count -gt $uInit) {
-            $ws.Dispose()
-            Write-Output "OK_NOWAIT: user messages $uInit -> $($us.count)"
-            exit 0
-        }
-    }
-    $ws.Dispose()
-    Write-Output "NOWAIT_TIMEOUT"
-    exit 2
-}
-
-# -------- 4b. 轮询等待助手回复 --------
 $deadline = (Get-Date).AddSeconds($Timeout)
 $finalText = ""
 $prevText = $lastAssist0
 $stableTicks = 0
-$requiredStable = 7
+$requiredStable = 10
 $sawNew = $false
 $nullTicks = 0
 $requiredNull = 10
 $ctxWarn = $false
 $cdpBroken = $false
+$tick = 0
+Dbg ("进入轮询 超时={0}s 判定稳定次数={1} 判定断开次数={2}" -f $Timeout, $requiredStable, $requiredNull) 'Cyan'
 
 while ((Get-Date) -lt $deadline) {
-    Start-Sleep -Milliseconds 300
+    Start-Sleep -Milliseconds 100
+    $tick++
+    if ($tick -eq 1 -or ($tick % 10) -eq 0) {
+        Dbg ("轮询#{0} 新={1} 稳定={2}/{3} 空={4}/{5}" -f $tick, $sawNew, $stableTicks, $requiredStable, $nullTicks, $requiredNull) 'DarkGray'
+    }
     $cur = CDP $lastAssistJs -timeoutMs 5000
     if ($null -eq $cur) {
         $nullTicks++
         if (-not $ctxWarn -and $nullTicks -ge 3) {
             $ctxWarn = $true
             Write-Output "WARN: CTX_HEAVY_OR_CDP_SLOW: null_ticks=$nullTicks"
+            Dbg ("CDP 取空 {0}/{1}" -f $nullTicks, $requiredNull) 'Yellow'
         }
         if ($nullTicks -ge $requiredNull) {
             $cdpBroken = $true
@@ -319,6 +324,7 @@ while ((Get-Date) -lt $deadline) {
     if (-not $sawNew) {
         if ($cur -ne $lastAssist0 -and $cur.Length -gt 0) {
             Write-Output "  [new-reply] len=$($cur.Length)"
+                Dbg ("发现新回复 len={0}" -f $cur.Length) 'Green'
             $sawNew = $true
             $prevText = $cur
         }
@@ -328,15 +334,18 @@ while ((Get-Date) -lt $deadline) {
     if ($cur -eq $prevText) {
         $stableTicks++
         if ($stableTicks -ge $requiredStable) {
+            Dbg ("文本稳定 {0} 次，判定完成 len={1}" -f $requiredStable, $cur.Length) 'Green'
             $finalText = $cur
             break
         }
     } else {
         $stableTicks = 0
         $prevText = $cur
+        Dbg ("  变化 len={0} 稳定重置" -f $cur.Length) 'DarkYellow'
     }
 }
 
+Dbg ("轮询结束 用时={0}ms 有结果={1}" -f [int]((Get-Date)-$script:DbgT0).TotalMilliseconds, [bool]$finalText) 'Cyan'
 if ($ws.State -eq 'Open') { $ws.Dispose() }
 if ($cdpBroken) { exit 3 }
 
@@ -347,10 +356,12 @@ if ($finalText) {
         $enc = [Text.Encoding]::GetEncoding(936)
         [IO.File]::WriteAllText($OutputFile, $finalText, $enc)
     }
+    Dbg ("已写文件 {0} 编码={1}" -f $OutputFile, $(if ($Encoding.ToLower() -match 'utf-?8') { 'UTF8-NOBOM' } else { 'GBK' })) 'Green'
     Write-Output "OK: len=$($finalText.Length) path=$OutputFile"
     Write-Output "----- reply.txt -----"
     Write-Output $finalText
 } else {
+    Dbg "超时 未等到回复" 'Red'
     Write-Output "TIMEOUT"
     exit 2
 }
