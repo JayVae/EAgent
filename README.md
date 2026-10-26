@@ -52,7 +52,7 @@
     - EAgent 轻量级的设计：整体只有一个 .exe 文件，大小连 3 MB都不到，仅供学习交流，不适用于生产 (小玩具来的)；
     - EAgent 无安全系统：DeepSeek 可能生成恶意代码、再通过 EAgent 破坏系统，有必要审查 Ai 执行的命令；
     - EAgent 有基础的防风控措施，但是 **极端高频的使用** 仍会被 DeepSeek 限制，作者不承担责任；
-- 病毒问题：本项目由 `e语言` 编写，由于其一言难尽的狗屎编译器，使部分杀毒软件误报木马病毒。但我保证：**本项目自身不会带有任何恶意代码，请放心使用。**[微步云-样本分析报告.pdf](https://github.com/user-attachments/files/33344596/_3ef75307f364aac0ab0212977530d167eadcc090084ce65829f8e4678737dcf7.pdf)
+- 病毒问题：本项目由 `e语言` 编写，由于其一言难尽的狗屎编译器，使部分杀毒软件误报木马病毒。但我保证：**本项目自身不会带有任何恶意代码，请放心使用。**[微步云-样本分析报告.pdf](https://github.com/user-attachments/files/33975912/_aa1cfadfaf91e60eef30a1400670305089e0cb11eefc07470897802731f74f41.pdf)
 - 本项目始于 2026/10/8，处于开发阶段，欢迎提交 [issue](https://github.com/YaoGaoChaoLe/EAgent/issues)。开源仓库 [在这](https://github.com/YaoGaoChaoLe/EAgent/)，遵循 `GPL-3.0` 协议。
 
 ```
