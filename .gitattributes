@@ -1,0 +1,18 @@
+# 统一换行：文本文件入库一律 LF，检出时 Windows 上也保持 LF，避免跨平台 diff 噪音
+* text=auto eol=lf
+
+# Windows 专属脚本保持 CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# 二进制文件不做任何转换
+*.exe binary
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary
+*.dat binary
+*.zip binary
+*.ec binary
+*.e binary

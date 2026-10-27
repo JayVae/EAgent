@@ -1,0 +1,30 @@
+{
+  "name": "mock-chat",
+  "url_match": "127\\.0\\.0\\.1:8787",
+  "selectors": {
+    "assistant_message": [
+      ".ds-assistant-message-main-content",
+      "[class*='ds-assistant-message-main-content']"
+    ],
+    "user_message": [
+      "[class*='fbb737a4']"
+    ],
+    "input": [
+      "textarea"
+    ],
+    "send_button": [
+      "div[role='button'].ds-button--primary.ds-button--circle",
+      "[role='button'][aria-label*='发送']",
+      "[role='button'][aria-label*='Send']"
+    ]
+  },
+  "stop_icon_path_prefix": "M2 4.88C2 3.68009",
+  "behavior": {
+    "send_mode": "auto",
+    "poll_interval_ms": 120,
+    "stable_window_ms": 2500,
+    "send_button_x_max_ratio": 0.5,
+    "send_button_y_min_ratio": 0.6
+  },
+  "js_overrides": {}
+}

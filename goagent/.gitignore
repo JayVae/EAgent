@@ -1,0 +1,6 @@
+# 构建产物
+eagent-cli.exe
+*.test
+
+# 本地测试配置
+testdata/local-*.json

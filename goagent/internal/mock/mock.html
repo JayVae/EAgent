@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>MockChat</title></head>
+<body style="font-family:sans-serif">
+<h3>EAgent-CLI mock 页面</h3>
+<div id="chat" style="border:1px solid #ccc;min-height:200px;padding:8px"></div>
+<textarea id="ta" style="width:80%;height:60px"></textarea>
+<input type="file" id="fi" multiple>
+<div role="button" aria-label="发送" class="ds-button--primary ds-button--circle" id="btn"
+     style="position:fixed;right:20px;bottom:20px;width:64px;height:44px;background:#4d6bfe;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer">
+  <svg viewBox="0 0 16 16" width="20"><path d="M8.3125 0.980206L15.125 7.5C15.5 7.875 15.5 8.125 15.125 8.5L8.3125 15.0198C7.9375 15.3948 7.3125 15.125 7.3125 14.625V1.37496C7.3125 0.874957 7.9375 0.605206 8.3125 0.980206Z" fill="#fff"/></svg>
+</div>
+<script>
+const SEND_PATH='M8.3125 0.980206L15.125 7.5C15.5 7.875 15.5 8.125 15.125 8.5L8.3125 15.0198C7.9375 15.3948 7.3125 15.125 7.3125 14.625V1.37496C7.3125 0.874957 7.9375 0.605206 8.3125 0.980206Z';
+const STOP_PATH='M2 4.88C2 3.68009 2.9 2.78009 4.1 2.78009H11.9C13.1 2.78009 14 3.68009 14 4.88C14 6.08009 13.1 6.98009 11.9 6.98009H4.1C2.9 6.98009 2 6.08009 2 4.88Z';
+function setIcon(m){document.querySelector('#btn path').setAttribute('d',m==='stop'?STOP_PATH:SEND_PATH);}
+function add(cls,t){const d=document.createElement('div');d.className=cls;d.textContent=t;document.getElementById('chat').appendChild(d);return d;}
+function send(){
+  const ta=document.getElementById('ta');
+  const msg=ta.value;ta.value='';
+  add('fbb737a4',msg);
+  setIcon('stop');
+  const files=[...document.getElementById('fi').files].map(f=>f.name).join(',');
+  let full;
+  if(files) full='[附件: '+files+'] 已收到文件。';
+  else if(msg.startsWith('run:')) full='好的，执行工具：\n### EAGENT_TOOL ps BEGIN\nWrite-Output ("mock-ok-" + (6*7))\n### EAGENT_TOOL END\n执行完毕。';
+  else if(msg.includes('mock-ok-42')) full='已确认结果 mock-ok-42，任务完成。';
+  else full='echo: '+msg;
+  const el=add('ds-assistant-message-main-content','');
+  let i=0;
+  const timer=setInterval(()=>{
+    i=Math.min(full.length,i+7);
+    el.textContent=full.slice(0,i);
+    if(i>=full.length){clearInterval(timer);setIcon('send');}
+  },250);
+}
+document.getElementById('ta').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();send();}});
+document.getElementById('btn').addEventListener('click',send);
+</script>
+</body>
+</html>
