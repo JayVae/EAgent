@@ -1,6 +1,8 @@
-# EAgent-CLI
+# EAgent-CLI (goagent)
 
-EAgent 的 Go 命令行重构版：让 DeepSeek 网页版"操控"你的电脑。
+让 DeepSeek 网页版"操控"你的电脑：不花钱、不要 API Key——通过 Chrome DevTools 协议(CDP)驱动本机 Edge/Chrome，把 DeepSeek 网页版变成一个能执行命令、读文件、截屏、控制鼠标的 Agent。
+
+> 本项目是 [EAgent](https://github.com/JayVae/EAgent)（易语言原版 [YaoGaoChaoLe/EAgent](https://github.com/YaoGaoChaoLe/EAgent)）的 Go 命令行重构版，本仓库只包含 Go 版本源码。
 
 不花钱、不要 API Key——通过 Chrome DevTools 协议(CDP)驱动本机 Edge/Chrome，把 DeepSeek 网页版变成一个能执行命令、读文件、截屏、控制鼠标的 Agent。
 
@@ -23,7 +25,7 @@ EAgent 的 Go 命令行重构版：让 DeepSeek 网页版"操控"你的电脑。
 ## 快速开始
 
 ```
-cd goagent
+go build -o eagent-cli.exe .
 ./eagent-cli.exe chat
 ```
 
